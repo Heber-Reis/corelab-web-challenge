@@ -24,7 +24,7 @@ const Button = (props) => {
   return (
     <>
       <StyledButton
-        onClick={() => alert('teste')}
+        onClick={props.onClick}
         width={props.width}
       >
         {props.children}

@@ -1,4 +1,5 @@
 import styled from 'styled-components'
+import { useRouter } from 'next/router'
 
 import Card from "../components/layout/Card"
 import Input from "../components/layout/Input"
@@ -29,13 +30,16 @@ const Search = styled.div`
 `
 
 function HomePage () {
+
+  const route = new useRouter()
+
   return(
     <Home>
       <Search>
-        <Input placeholder={"Search"} icon={"/Search.png"} />
+        <Input placeholder={"Buscar"} icon={"/Search.png"} />
         <button><img src={"/filter.png"}/></button>
       </Search>
-      <Button icon={"/Add.png"}>ADICIONAR</Button>
+      <Button icon={"/Add.png"} onClick={() => route.push('/new')}>ADICIONAR</Button>
       <Card 
         title={"SANDERO"}
         price={22900}

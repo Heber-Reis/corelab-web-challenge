@@ -9,16 +9,13 @@ const GlobalStyle = createGlobalStyle`
     padding-top: 40px;
   }
 
-  a{
-    position: relative;
-    top: -30px;
-  }
 `
 
 const StyledForm = styled.div`
   background-color: #fff;
-  padding: 5rem 2rem;
-  max-width: 90vw;
+  padding: 3rem 2rem;
+  padding-bottom: 1rem;
+  width: 100%;
   display: flex;
   flex-direction: column;
   gap: 38px;
@@ -26,12 +23,15 @@ const StyledForm = styled.div`
   Button {
     align-self: flex-end;
   }
+
+  @media screen and (min-width:${props => props.theme.brakepoints.laptopSize}) {
+    background-color: ${props => props.theme.background};
+  }
 `
 
 const FormVehicle = () => {
   return(
     <>
-      <a href='/'><img src="Arrow.png" width={'30px'} /></a>
       <StyledForm>
         <GlobalStyle />
         <Input color={'transparent'} border={'1px solid black'} label={'Nome:'} />

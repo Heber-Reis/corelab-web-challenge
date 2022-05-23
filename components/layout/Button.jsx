@@ -6,7 +6,8 @@ const StyledButton = styled.button`
   border-radius: 100px;
   width: ${props => props.width};
   height: 3.5rem;
-  font-size: 1.5rem;
+  font-size: 1rem;
+  font-weight: bold;
 `
 
 const StyledIcon = styled.img`

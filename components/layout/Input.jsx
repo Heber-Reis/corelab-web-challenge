@@ -9,15 +9,15 @@ const InputContainer = styled.div`
 `
 
 const InputContent = styled.div`
-  height: 60px;
   width: 100%;
+  height: ${props => props.width};
   display: flex;
   align-items: center;
   background-color: ${props => props.color};
   border-radius: 100px;
   padding: 0 34px;
   border: ${props => props.border};
-
+  
   img{
     background-color: transparent;
   }
@@ -28,15 +28,19 @@ const StyledInput = styled.input`
   border: none;
   background-color: transparent;
   height: 100%;
-  
+  width: 100%;
+  font-size: 1rem;
 `
 
 const Input = (props) => {
   return(
     <InputContainer>
-      <label>{props.label}</label>
+      {
+        props.label && 
+        <label>{props.label}</label>
+      }
       <InputContent {...props}>
-        <img src={props.icon} />
+        <img src={props.icon}/>
         <StyledInput {...props} />
       </InputContent>
     </InputContainer>
@@ -45,7 +49,8 @@ const Input = (props) => {
 
 Input.defaultProps = {
   color: '#65DCC74D',
-  border: 'none'
+  border: 'none',
+  width: '3rem'
 }
 
 export default Input

@@ -10,6 +10,7 @@ const GlobalStyle = createGlobalStyle`
 
   html{
     background-color: ${props => props.theme.background};
+ 
   }
 
   body{
@@ -18,11 +19,10 @@ const GlobalStyle = createGlobalStyle`
     sans-serif;
    -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-
-    height: 100vh;
-    width: 100vw;
+    min-height: 100vh;
+    width: 100%;
     padding: 0 24px;
-    padding-top: 90px;
+    padding-top: 5rem;
 
     @media screen and (min-width: ${props => props.theme.brakepoints.laptopSize}){
       max-width: 869px;

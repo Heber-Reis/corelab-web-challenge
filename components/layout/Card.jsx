@@ -56,9 +56,13 @@ const Card = (props) => {
   return (
     <StyledCard>
       <StyledControls>
-        <button onClick={Edit}>
-          <img src="edit.png" width={"40px"} />
-        </button>
+        {
+          props.showEditButton &&
+          <button onClick={Edit}>
+            <img src="edit.png" width={"40px"} />
+          </button>
+        }
+
         <button onClick={Delete}>
           <img src="delete.png" width={"20px"} />
         </button>
@@ -78,5 +82,9 @@ const Card = (props) => {
     </StyledCard>
   );
 };
+
+Card.defaultProps = {
+  showEditButton: true
+}
 
 export default Card;

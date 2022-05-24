@@ -1,3 +1,4 @@
+import { forwardRef } from 'react'
 import styled from 'styled-components'
 
 const InputContainer = styled.div`
@@ -32,7 +33,7 @@ const StyledInput = styled.input`
   font-size: 1rem;
 `
 
-const Input = (props) => {
+const Input = forwardRef((props,ref) => {
   return(
     <InputContainer>
       {
@@ -41,11 +42,11 @@ const Input = (props) => {
       }
       <InputContent {...props}>
         <img src={props.icon}/>
-        <StyledInput {...props} />
+        <StyledInput {...props} ref={ref}/>
       </InputContent>
     </InputContainer>
   )
-}
+})
 
 Input.defaultProps = {
   color: '#65DCC74D',

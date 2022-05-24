@@ -1,3 +1,4 @@
+import { forwardRef } from 'react'
 import styled from 'styled-components'
 
 const SelectContainer = styled.div`
@@ -32,12 +33,12 @@ const Select = styled.select`
   -webkit-appearance: none;
 `
 
-const SelectBox = (props) => {
+const SelectBox = forwardRef((props, ref) => {
   return(
     <SelectContainer>
       <label>{props.label}:</label>
       <SelectContent>
-        <Select>
+        <Select ref={ref}>
           {
             props.options.map((element, key) =>
               <option key={key}>{element}</option>
@@ -48,6 +49,6 @@ const SelectBox = (props) => {
       </SelectContent>
     </SelectContainer>
   )
-}
+})
 
 export default SelectBox

@@ -1,4 +1,5 @@
 import styled, { createGlobalStyle } from 'styled-components'
+import { useForm } from 'react-hook-form'
 
 import FormVehicle from '../components/layout/FormVehicle'
 
@@ -31,6 +32,8 @@ const GlobalStyle = createGlobalStyle`
 `
 
 const New = () => {
+
+  const { register, handleSubmit } = useForm()
 
   return(
     <>

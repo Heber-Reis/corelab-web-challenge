@@ -1,5 +1,6 @@
 import styled from 'styled-components'
 import { createGlobalStyle } from 'styled-components'
+import { useForm } from 'react-hook-form'
 
 import Input from './Input'
 import Button from './Button'
@@ -11,7 +12,7 @@ const GlobalStyle = createGlobalStyle`
 
 `
 
-const StyledForm = styled.div`
+const StyledForm = styled.form`
   background-color: #fff;
   padding: 3rem 2rem;
   padding-bottom: 1rem;
@@ -29,17 +30,25 @@ const StyledForm = styled.div`
   }
 `
 
-const FormVehicle = () => {
+const FormVehicle = (props) => {
+
+  const { register, handleSubmit } = useForm()
+
+  const handleForm = (data) => {
+    console.log(data)
+  }
+
   return(
     <>
-      <StyledForm>
-        <GlobalStyle />
-        <Input color={'transparent'} border={'1px solid black'} label={'Nome:'} />
-        <Input color={'transparent'} border={'1px solid black'} label={'Marca:'} />
-        <Input color={'transparent'} border={'1px solid black'} label={'Cor:'} />
-        <Input color={'transparent'} border={'1px solid black'} label={'Ano:'} />
-        <Input color={'transparent'} border={'1px solid black'} label={'Placa:'} />
-        <Button width={'8rem'}>SALVAR</Button>
+      <GlobalStyle />
+      <StyledForm onSubmit={handleSubmit(handleForm)}>
+        <Input color={'transparent'} border={'1px solid black'} label={'Nome:'} {...register('title')}/>
+        <Input color={'transparent'} border={'1px solid black'} label={'Marca:'} {...register('brand')} />
+        <Input color={'transparent'} border={'1px solid black'} label={'Descrição:'} {...register('description')} />
+        <Input color={'transparent'} border={'1px solid black'} label={'Cor:'} {...register('color')} />
+        <Input color={'transparent'} border={'1px solid black'} label={'Ano:'} {...register('year')}/>
+        <Input color={'transparent'} border={'1px solid black'} label={'Placa:'} {...register('licensePlate')}/>
+        <Button width={'8rem'} type={'submit'}>SALVAR</Button>
       </StyledForm>
     </>
 

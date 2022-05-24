@@ -1,3 +1,5 @@
+import { useEffect } from 'react';
+import { useState } from 'react';
 import styled from 'styled-components'
 
 const StyledCard = styled.div`
@@ -41,33 +43,26 @@ const StyledInfo = styled.div`
 
 const Card = (props) => {
 
-  const Edit = () =>{
-    alert('Edita')
-  }
+  const [isFavorite, setFavorite] = useState(true)
 
-  const Delete = () => {
-    alert('Deleta')
-  }
-
-  const Favorite = () => {
-    alert('Favorita')
-  }
+  useEffect(() => {
+    setFavorite(props.isFavorite)    
+  },[])
 
   return (
     <StyledCard>
       <StyledControls>
         {
           props.showEditButton &&
-          <button onClick={Edit}>
+          <button onClick={() => props.Edit()}>
             <img src="edit.png" width={"40px"} />
           </button>
         }
-
-        <button onClick={Delete}>
+        <button onClick={() => props.Delete()}>
           <img src="delete.png" width={"20px"} />
         </button>
-        <button onClick={Favorite}>
-          <img src="Heart.png" width={"30px"} />
+        <button onClick={() => props.Favorite(!isFavorite)}>
+          <img src={isFavorite ? 'HeartFavorite.png' : 'Heart.png'} width={"30px"} />
         </button>
       </StyledControls>
       <StyledInfo>
@@ -84,7 +79,8 @@ const Card = (props) => {
 };
 
 Card.defaultProps = {
-  showEditButton: true
+  showEditButton: true,
+  Edit: () => {}
 }
 
 export default Card;

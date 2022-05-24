@@ -3,6 +3,8 @@ import { useRouter } from 'next/router'
 import Button from '../components/layout/Button'
 import Input from '../components/layout/Input'
 import SelectBox from '../components/layout/SelectBox'
+import { useForm } from 'react-hook-form'
+import { useState } from 'react'
 
 const GlobalStyle = createGlobalStyle`
 
@@ -27,7 +29,7 @@ const Link = styled.a`
   left: 0.5rem;
 `
 
-const StyledFilter = styled.div`
+const StyledFilter = styled.form`
   padding: 3rem 2rem 1rem ;
   background-color: #fff;
   display: flex;
@@ -52,21 +54,27 @@ const PriceRange = styled.div`
 const FilterPage  = () => {
 
   const route = useRouter()
+  const { register, handleSubmit }  = useForm()
 
-  const SaveFilters = () => {
+  const [brands, setBrands] = useState(['Fiat','Toyota'])
+  const [colors, setColors] = useState(['Branco','Preto'])
+  const [years, setYears] = useState(['2005','2010'])
+
+  const SaveFilters = (data) => {
+    console.log(data)
     route.push('/')
   }
   return(
     <>
       <Link href='/'><img src="Arrow.png" width={'30px'} /></Link>
-      <StyledFilter>
-        <SelectBox options={['opção 1', 'opção 2']} label={'marca'} />
-        <SelectBox options={['opção 1', 'opção 2']} label={'marca'} />
-        <SelectBox options={['opção 1', 'opção 2']} label={'marca'} />
+      <StyledFilter onSubmit={handleSubmit(SaveFilters)}>
+        <SelectBox options={brands} label={'Marca'} {...register('brand')}/>
+        <SelectBox options={colors} label={'Cor'} {...register('color')}/>
+        <SelectBox options={years} label={'Ano'} {...register('year')}/>
         <GlobalStyle />
         <PriceRange>
-          <Input color={'#fff'} width={'1.5rem'} border={'1px solid black'} label={'Preço mín::'} />
-          <Input color={'#fff'} width={'1.5rem'} border={'1px solid black'} label={'Preço máx:'} />
+          <Input color={'#fff'} width={'1.5rem'} border={'1px solid black'} label={'Preço mín::'} {...register('minPrice')}/>
+          <Input color={'#fff'} width={'1.5rem'} border={'1px solid black'} label={'Preço máx:'} {...register('maxPrice')}/>
         </PriceRange>
         <Button width={'8rem'} onClick={SaveFilters}>SALVAR</Button>
       </StyledFilter>

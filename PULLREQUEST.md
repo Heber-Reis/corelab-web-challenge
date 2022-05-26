@@ -40,3 +40,11 @@ Os cards são separados em 3 seções:
 *Favoritos: todos os cards que são marcados como favoritos de qualquer usuário
 
 *Anúncios: todos os card que não são do usuário ativo
+
+# Formulários
+
+Os formulários do projeto foram feitos utilizando o React Hook Form
+
+# Video Explicativo
+
+https://www.youtube.com/watch?v=CPYHFf3NaIc&ab_channel=HeberMagno

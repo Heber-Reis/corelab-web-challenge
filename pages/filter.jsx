@@ -1,10 +1,14 @@
 import styled, {createGlobalStyle} from 'styled-components'
 import { useRouter } from 'next/router'
+import { useForm } from 'react-hook-form'
+import { useState, useEffect } from 'react'
+import Cookies from 'universal-cookie'
+
+import SelectBox from '../components/layout/SelectBox'
 import Button from '../components/layout/Button'
 import Input from '../components/layout/Input'
-import SelectBox from '../components/layout/SelectBox'
-import { useForm } from 'react-hook-form'
-import { useState } from 'react'
+import API from '../services/api'
+
 
 const GlobalStyle = createGlobalStyle`
 
@@ -53,17 +57,38 @@ const PriceRange = styled.div`
 
 const FilterPage  = () => {
 
+  const cookies = new Cookies()
   const route = useRouter()
   const { register, handleSubmit }  = useForm()
 
-  const [brands, setBrands] = useState(['Fiat','Toyota'])
-  const [colors, setColors] = useState(['Branco','Preto'])
-  const [years, setYears] = useState(['2005','2010'])
+  const [brands, setBrands] = useState(['Todos'])
+  const [colors, setColors] = useState(['Todos'])
+  const [years, setYears] = useState(['Todos'])
+
+  const getFilters = () => {
+    API.get('/vehicles/get_filters').then(({data}) => {
+      setBrands([...brands, ...data.brand])
+      setColors([...colors, ...data.color])
+      setYears([...years, ...data.year])
+    })
+  }
+
+  useEffect(getFilters,[])
 
   const SaveFilters = (data) => {
-    console.log(data)
+    const dataFilters = {
+      brand: data.brand,
+      color: data.color,
+      year: data.year,
+      price: {
+        minPrice: data.minPrice,
+        maxPrice: data.maxPrice
+      }
+    }
+    cookies.set('InfoFilters', dataFilters )
     route.push('/')
   }
+
   return(
     <>
       <Link href='/'><img src="Arrow.png" width={'30px'} /></Link>
@@ -76,7 +101,7 @@ const FilterPage  = () => {
           <Input color={'#fff'} width={'1.5rem'} border={'1px solid black'} label={'Preço mín::'} {...register('minPrice')}/>
           <Input color={'#fff'} width={'1.5rem'} border={'1px solid black'} label={'Preço máx:'} {...register('maxPrice')}/>
         </PriceRange>
-        <Button width={'8rem'} onClick={SaveFilters}>SALVAR</Button>
+        <Button width={'8rem'} type={'submit'}>SALVAR</Button>
       </StyledFilter>
     </>
 

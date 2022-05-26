@@ -1,5 +1,3 @@
-import { useEffect } from 'react';
-import { useState } from 'react';
 import styled from 'styled-components'
 
 const StyledCard = styled.div`
@@ -43,12 +41,6 @@ const StyledInfo = styled.div`
 
 const Card = (props) => {
 
-  const [isFavorite, setFavorite] = useState(true)
-
-  useEffect(() => {
-    setFavorite(props.isFavorite)    
-  },[])
-
   return (
     <StyledCard>
       <StyledControls>
@@ -61,8 +53,8 @@ const Card = (props) => {
         <button onClick={() => props.Delete()}>
           <img src="delete.png" width={"20px"} />
         </button>
-        <button onClick={() => props.Favorite(!isFavorite)}>
-          <img src={isFavorite ? 'HeartFavorite.png' : 'Heart.png'} width={"30px"} />
+        <button onClick={() => props.Favorite()}>
+          <img src={props.isFavorite ? 'HeartFavorite.png' : 'Heart.png'} width={"30px"} />
         </button>
       </StyledControls>
       <StyledInfo>

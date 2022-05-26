@@ -1,11 +1,13 @@
 import styled from 'styled-components'
 import { useRouter } from 'next/router'
+import { useEffect, useState } from 'react'
+import Cookies from 'universal-cookie'
+import { useForm } from 'react-hook-form'
 
 import Input from "../components/layout/Input"
 import Button from '../components/layout/Button'
-import { useEffect, useState } from 'react'
 import MyAds from '../components/VehicleCards/MyAds'
-import { useForm } from 'react-hook-form'
+import API from  '../services/api'
 
 const Home = styled.div`
   display: flex;
@@ -50,53 +52,84 @@ const SearchArrow = styled.img`
 
 function HomePage () {
 
-  const route = new useRouter()
+  const route = useRouter()
+  const cookies = new Cookies()
   const {register, handleSubmit} = useForm()
 
-  const [showFilter, setShowFilter] = useState()
-  const [Ads, setAds] = useState([{title: 'teste1'},{title: 'teste'},{title: 'teste'},{title: 'teste'}])
-  const [myAds, setMyAds] = useState([{title: 'teste'}])
-  const [favorites, setFavorites] = useState([{title: 'teste'}])
+  const [receivedData, setReceivedData] = useState([])
+  const [Ads, setAds] = useState([])
+  const [myAds, setMyAds] = useState([])
+  const [favorites, setFavorites] = useState([])
 
-  const changeFavorites = (key, isFavorite, Section) => {
-    console.log(key, isFavorite, Section)
+  const organizeData = () => {
 
-    if(isFavorite){
-      if(Section === 'Ads'){
-        setFavorites([...favorites, { ...Ads[key], section: 'Ads' }])
-        Ads.splice(key,1)
+    const AdsData = []
+    const myAdsData = []
+    const FavoritesData = []
+    receivedData.map((element) => {
+      if(element.isFavorite === true) { 
+        FavoritesData.push(element)
       }
-      if(Section === 'myAds'){
-        setFavorites([...favorites,{ ...myAds[key], section: 'myAds' }])
-        myAds.splice(key,1)
+      if(element.user === 'user1') {
+        myAdsData.push(element)
       }
-    }
-    else{
-      if(favorites[key].section === 'Ads'){
-        setAds([...Ads,favorites[key]])
-      }else{
-        setMyAds([...myAds,favorites[key]])
+      else { 
+        AdsData.push(element)
       }
-      favorites.splice(key,1)
-      setFavorites([...favorites])
-    }
+    })
+    setAds(AdsData)
+    setMyAds(myAdsData)
+    setFavorites(FavoritesData)
+  }
+
+  const getVehicles = () =>{
+
+    API.get('/vehicles/get_all').then(({data}) => {
+        setReceivedData(data)
+      }
+    ).catch((err) => console.log(err.response))
+
+  }
+
+  useEffect(getVehicles,[])
+  useEffect(organizeData,[receivedData])
+
+  const changeFavorites = (idVehicle, isFavorite) => {
+
+    API.post('/vehicles/set_favorite',{
+      _id: idVehicle,
+      isFavorite: !isFavorite
+    }).then((res) => {
+      if(res.status === 200){
+        getVehicles()
+      }
+    })
+
   }
 
   const Edit = (key) =>{
-    console.log('Editando ',myAds[key])
+    cookies.set('selected_vehicle', myAds[key])
+    route.push('/update')
   }
 
-  const Delete = (key, section) => {
-    console.log(key, section)
-    switch(section){
-      case 'myAds': myAds.splice(key,1); setMyAds([...myAds]); break
-      case 'Ads' : Ads.splice(key,1); setAds([...Ads]); break
-      case 'Favorites': favorites.splice(key,1); setFavorites([...favorites]); break
-    }
+  const Delete = (idVehicle) => {
+    API.delete(`/vehicles/delete/${idVehicle}`).then((res) => {
+      if(res.status === 200){
+        alert('Veículo deletado com sucesso')
+        getVehicles()
+      }
+    })
   }
 
   const handleSearch = (data) => {
-    console.log(data)
+    API.get('/vehicles/get_filtered',{
+      params: {
+        keyword: data.search,
+        filters: cookies.get('InfoFilters')
+      }
+    }).then(({data}) => {
+      setReceivedData(data)
+    })
   }
 
   return(
@@ -112,9 +145,9 @@ function HomePage () {
         <MyAds
           Ads={myAds}
           NameSection={'Meus Anúncios:'}
-          changeFavorites={(key, isFavorite) => changeFavorites(key, isFavorite,'myAds')}
+          changeFavorites={(idVehicle,isFavorite) => changeFavorites(idVehicle,isFavorite)}
           Edit={(key) => Edit(key)}
-          Delete={(key) => Delete(key,'myAds')}
+          Delete={(idVehicle) => Delete(idVehicle)}
         />
       }
       {
@@ -122,10 +155,9 @@ function HomePage () {
         <MyAds
           Ads={favorites}
           NameSection={'Favoritos:'}
-          showEditButton={false}
           isFavorite={true}
-          changeFavorites={(key, isFavorite) => changeFavorites(key, isFavorite,'Favorites')}
-          Delete={(key) => Delete(key,'Favorites')}
+          changeFavorites={(idVehicle, isFavorite) => changeFavorites(idVehicle, isFavorite)}
+          Delete={(idVehicle) => Delete(idVehicle)}
         />
       }
       {
@@ -133,9 +165,8 @@ function HomePage () {
         <MyAds
           Ads={Ads}
           NameSection={'Anúncios:'}
-          showEditButton={false}
-          changeFavorites={(key, isFavorite) => changeFavorites(key, isFavorite,'Ads')}
-          Delete={(key) => Delete(key,'Ads')}
+          changeFavorites={(idVehicle,isFavorite) => changeFavorites(idVehicle, isFavorite)}
+          Delete={(idVehicle) => Delete(idVehicle)}
         />
       }
     </Home>

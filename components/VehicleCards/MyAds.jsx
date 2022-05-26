@@ -1,6 +1,4 @@
 import styled from 'styled-components'
-import { useState, useEffect } from 'react'
-
 import Card from '../layout/Card'
 
 const StyledAds = styled.div`
@@ -33,10 +31,10 @@ const MyAds = (props) => {
               description={element.description}
               year={element.year}
               color={element.color}
-              showEditButton={props.showEditButton}
-              isFavorite={props.isFavorite}
-              Favorite={(isFavorite) => {props.changeFavorites(key, isFavorite)}}
-              Delete={() => props.Delete(key)}
+              showEditButton={(element.user === 'user1')}
+              isFavorite={element.isFavorite}
+              Favorite={() => {props.changeFavorites(element._id, element.isFavorite)}}
+              Delete={() => props.Delete(element._id)}
               Edit={() => props.Edit(key)}
             />
           )

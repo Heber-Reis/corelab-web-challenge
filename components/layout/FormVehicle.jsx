@@ -34,17 +34,14 @@ const FormVehicle = (props) => {
 
   const { register, handleSubmit } = useForm()
 
-  const handleForm = (data) => {
-    console.log(data)
-  }
-
   return(
     <>
       <GlobalStyle />
-      <StyledForm onSubmit={handleSubmit(handleForm)}>
+      <StyledForm onSubmit={handleSubmit(props.handleSubmit)}>
         <Input color={'transparent'} border={'1px solid black'} label={'Nome:'} {...register('title')}/>
         <Input color={'transparent'} border={'1px solid black'} label={'Marca:'} {...register('brand')} />
         <Input color={'transparent'} border={'1px solid black'} label={'Descrição:'} {...register('description')} />
+        <Input color={'transparent'} border={'1px solid black'} label={'Valor:'} {...register('price')}/>
         <Input color={'transparent'} border={'1px solid black'} label={'Cor:'} {...register('color')} />
         <Input color={'transparent'} border={'1px solid black'} label={'Ano:'} {...register('year')}/>
         <Input color={'transparent'} border={'1px solid black'} label={'Placa:'} {...register('licensePlate')}/>

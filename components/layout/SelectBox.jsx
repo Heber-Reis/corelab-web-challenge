@@ -9,8 +9,6 @@ const SelectContainer = styled.div`
 
 const SelectContent = styled.div`
   position: relative;
-
-
 `
 const Img = styled.img`
 
@@ -19,7 +17,6 @@ const Img = styled.img`
   top: 1rem;
   
 `
-
 
 const Select = styled.select`
   width: 100%;
@@ -38,10 +35,10 @@ const SelectBox = forwardRef((props, ref) => {
     <SelectContainer>
       <label>{props.label}:</label>
       <SelectContent>
-        <Select ref={ref}>
+        <Select {...props} ref={ref}>
           {
             props.options.map((element, key) =>
-              <option key={key}>{element}</option>
+              <option value={element} key={key}>{element}</option>
             )
           }
         </Select>
